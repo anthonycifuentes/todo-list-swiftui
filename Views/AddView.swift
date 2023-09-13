@@ -21,17 +21,18 @@ struct AddView: View {
             VStack {
                 TextField("Type a task...", text: $textFielText)
                     .padding()
-                    .background(.gray)
-                    .foregroundColor(.white)
+                    .background(Color(.systemGray6))
+                    .foregroundColor(.black)
                     .cornerRadius(8)
                 Button(action: {
                     saveButtonPressed()
                         }) {
                             Text("SAVE")
-                                .fontWeight(.bold)
+                                .font(.subheadline)
+                                .fontWeight(.semibold)
                                 .foregroundColor(.white)
-                                .padding()
-                                .background(Color.blue)
+                                .frame(width: 360, height: 56)
+                                .background(Color(.systemBlue))
                                 .cornerRadius(8)
                         }
             }
