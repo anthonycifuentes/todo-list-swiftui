@@ -26,15 +26,15 @@ struct AddView: View {
                     .cornerRadius(8)
                 Button(action: {
                     saveButtonPressed()
-                        }) {
-                            Text("SAVE")
-                                .font(.subheadline)
-                                .fontWeight(.semibold)
-                                .foregroundColor(.white)
-                                .frame(width: 360, height: 56)
-                                .background(Color(.systemBlue))
-                                .cornerRadius(8)
-                        }
+                }) {
+                    Text("SAVE")
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.white)
+                        .frame(width: 360, height: 56)
+                        .background(Color(.systemBlue))
+                        .cornerRadius(8)
+                }
             }
             .padding()
         }
