@@ -8,28 +8,17 @@
 import SwiftUI
 
 struct ProductsListView: View {
-    @StateObject var productsListViewModel : ProductsListViewModel = ProductsListViewModel()
+    @EnvironmentObject var productsListViewModel : ProductsListViewModel
+    @EnvironmentObject var authViewModel: AuthViewModel
     var body: some View {
+       
         List {
+            if let firstName = authViewModel.auth.user?.firstName {
+                Text("Welcome \(firstName)")
+            }
             ForEach(productsListViewModel.products, id: \.id) { product in
-                HStack {
-                    AsyncImage(url: URL(string: product.thumbnail)){ image in
-                        image
-                            .resizable()
-                            .scaledToFit()
-                    } placeholder: {
-                        ProgressView()
-                    }
-                    .frame(width: 120)
-                    VStack(alignment: .leading) {
-                        Text(product.title)
-                            .bold()
-                        Text("USD $\(product.price)")
-                            .font(.caption)
-                    }
-                    .padding(.horizontal)
-                    Spacer()
-                    Image(systemName: "chevron.right")
+                NavigationLink(destination: ProductDetailView(product: product)) {
+                    ProductListRow(product: product)
                 }
             }
         }
@@ -40,6 +29,16 @@ struct ProductsListView: View {
                     AddProductView()
                 }
             }
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button {
+                    authViewModel.logOut()
+                } label: {
+                    Text("LOGOUT")
+                        .foregroundColor(.red)
+                }
+
+               
+            }
         }
     }
 }
@@ -48,6 +47,7 @@ struct ProductsListView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
             ProductsListView()
+                .environmentObject(ProductsListViewModel())
         }
         
     }

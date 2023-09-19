@@ -9,10 +9,18 @@ import SwiftUI
 
 @main
 struct TodoListApp: App {
-
+    @StateObject var authViewModel: AuthViewModel = AuthViewModel()
     var body: some Scene {
         WindowGroup {
-                MainTabView()
+            NavigationView {
+                if authViewModel.auth.isAuth {
+                    MainTabView()
+                } else {
+                    LoginView()
+                }
+            }
+            .environmentObject(authViewModel)
         }
+       
     }
 }

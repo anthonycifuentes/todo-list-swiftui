@@ -13,46 +13,34 @@ class ProductsListViewModel: ObservableObject {
     
     
     init(){
-//        getProducts { result in
-//            switch result {
-//            case .success(let products):
-//                print(products)
-//            case .failure(let error):
-//                // Handle the error
-//                print("Error fetching products: \(error)")
-//            }
-//
-//        }
-        getProducts()
+        //        getProducts { result in
+        //            switch result {
+        //            case .success(let products):
+        //                print(products)
+        //            case .failure(let error):
+        //                // Handle the error
+        //                print("Error fetching products: \(error)")
+        //            }
+        //
+        //        }
+        getProductsWitAlamofire()
     }
     
-    //        func getProducts(completion: @escaping (Result<[ProductModel], Error>) -> Void) {
-    //            AF.request(URL)
-    //                .validate()
-    //                .responseDecodable(of: ProductsModel.self) { response in
-    //                    switch response.result {
-    //                    case .success(let productsModel):
-    //                        self.products = productsModel.products
-    //                        completion(.success(self.products))
-    //                    case .failure(let error):
-    //                        completion(.failure(error))
-    //                    }
-    //                }
-    //        }
-    func getProducts() {
+    func getProductsWitAlamofireAndEscaping(completion: @escaping (Result<[ProductModel], Error>) -> Void) {
         AF.request(API_URL)
             .validate()
             .responseDecodable(of: ProductsModel.self) { response in
                 switch response.result {
                 case .success(let productsModel):
                     self.products = productsModel.products
+                    completion(.success(self.products))
                 case .failure(let error):
-                    print(error)
+                    completion(.failure(error))
                 }
             }
     }
     
-    func fetchProducts() {
+    func getProductsWithURLSession() {
         let url = URL(string: API_URL)!
         let request = URLRequest(url: url)
         let session = URLSession.shared
@@ -72,6 +60,32 @@ class ProductsListViewModel: ObservableObject {
                 }
             }
         }.resume()
+    }
+    func getProductsWitAlamofire() {
+        AF.request(API_URL)
+            .validate()
+            .responseDecodable(of: ProductsModel.self) { response in
+                switch response.result {
+                case .success(let productsModel):
+                    self.products = productsModel.products
+                case .failure(let error):
+                    print(error)
+                }
+            }
+    }
+    
+    func createProductWithAlamofire(product: ProductModel, completion: @escaping (Result<ProductModel, Error>) -> Void){
+        AF.request(API_URL+"/add", method: .post, parameters: product, encoder: JSONParameterEncoder.default)
+            .validate()
+            .responseDecodable(of: ProductModel.self){ response in
+                switch response.result {
+                case .success(let createdItem):
+                    self.products.insert(product, at: 0)
+                    completion(.success(createdItem))
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            }
     }
 }
 
