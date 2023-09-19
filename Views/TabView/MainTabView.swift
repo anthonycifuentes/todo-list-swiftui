@@ -9,6 +9,7 @@ import SwiftUI
 
 struct MainTabView: View {
     @StateObject var listViewModel : ListViewModel = ListViewModel()
+    @StateObject var productListViewModel: ProductsListViewModel = ProductsListViewModel()
     var body: some View {
         TabView {
             NavigationView{
@@ -17,7 +18,7 @@ struct MainTabView: View {
             .tabItem {
                 Image(systemName: "list.bullet.below.rectangle")
             }
-            
+            .environmentObject(productListViewModel)
             NavigationView{
                 TodoListView()
             }
